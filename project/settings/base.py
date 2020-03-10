@@ -272,6 +272,8 @@ HAYSTACK_CONNECTIONS = {
 # MACHINA SETTINGS
 # ------------------------------------------------------------------------------
 
+MACHINA_FORUM_NAME = "TableTop Gaming!"
+
 MACHINA_DEFAULT_AUTHENTICATED_USER_FORUM_PERMISSIONS = [
     'can_see_forum',
     'can_read_forum',
