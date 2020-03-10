@@ -82,7 +82,7 @@ DEBUG = False
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(PROJECT_PATH / 'test.db'),
+        'NAME': str(PROJECT_PATH / 'db.sqlite3'),
     }
 }
 
