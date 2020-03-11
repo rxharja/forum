@@ -31,7 +31,7 @@ INSTALLED_APPS = (
     # Machina apps
     'machina',
     'machina.apps.forum',
-    'machina.apps.forum_conversation',
+    #'machina.apps.forum_conversation',
     'machina.apps.forum_conversation.forum_attachments',
     'machina.apps.forum_conversation.forum_polls',
     'machina.apps.forum_feeds',
@@ -40,6 +40,9 @@ INSTALLED_APPS = (
     'machina.apps.forum_tracking',
     'machina.apps.forum_member',
     'machina.apps.forum_permission',
+
+    # Overridden machina apps:
+    'apps.forum_conversation',
 )
 
 
