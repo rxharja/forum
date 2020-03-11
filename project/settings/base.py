@@ -140,6 +140,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': (
+            str(PROJECT_PATH / 'main' / 'templates' / 'extensions'),
+            str(PROJECT_PATH / 'main' / 'templates' / 'recommendations'),
             str(PROJECT_PATH / 'main' / 'templates'),
             MACHINA_MAIN_TEMPLATE_DIR,
         ),

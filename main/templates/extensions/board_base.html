@@ -32,6 +32,7 @@
 {% block body %}
 <div id="wrap">
   {{ block.super }}
+  {% include "recommendations/recommendations.html" %}
   <div id="push"></div>
 </div>
 <footer id="footer" class="py-2 bg-light">
@@ -45,4 +46,5 @@
     </div>
   </div>
 </footer>
+
 {% endblock body %}
