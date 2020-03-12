@@ -5,11 +5,11 @@
 
 <div id="outer-box-rec">
   <div id="head-rec">
-    <h3>Recommendations for you</h3>
+    <h3>Recommendations for you {{ game.photo }}</h3>
   </div>
   <div id="container-rec">
     <div class="rec-card" id="card1">
-      <img src="https://www.unsplash.it/150/150">
+      <img src="{{ game.photo }}">
       <p>Game Name</p>
       <p>Genre</p>
     </div>

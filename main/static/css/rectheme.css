@@ -1,3 +1,9 @@
+img {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+}
+
 #outer-box-rec {
   display: flex;
   flex-direction: column;

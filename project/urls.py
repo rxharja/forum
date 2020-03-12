@@ -3,7 +3,6 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.i18n import JavaScriptCatalog
 from machina import urls as machina_urls
-from main.views import recommendations as app_recommendations
 
 
 js_info_dict = {
@@ -18,7 +17,7 @@ urlpatterns = [
 
     # Apps
     path('', include(machina_urls)),
-    path('', app_recommendations),
+    path('', include('game.urls')),
     path('', include('main.apps.auth.urls')),
 ]
 
