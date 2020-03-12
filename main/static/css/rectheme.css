@@ -1,0 +1,27 @@
+#outer-box-rec {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  margin: 0 auto 2em auto;
+}
+
+#head-rec {
+  border-bottom: 1px solid black;
+}
+
+#container-rec {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 2em;
+}
+
+.rec-card {
+  margin-top: 2em;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s
+}
+
+.rec-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
