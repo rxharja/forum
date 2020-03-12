@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.i18n import JavaScriptCatalog
 from machina import urls as machina_urls
+from .views import home as a_home
 
 
 js_info_dict = {
@@ -16,9 +17,9 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
 
     # Apps
-    path('', include(machina_urls)),
-    path('', include('game.urls')),
+    path('', include('main.apps.game.urls')),
     path('', include('main.apps.auth.urls')),
+    path('', include(machina_urls)),
 ]
 
 if settings.DEBUG:

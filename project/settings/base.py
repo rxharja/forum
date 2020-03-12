@@ -44,7 +44,8 @@ INSTALLED_APPS = (
     # Overridden machina apps:
     'apps.forum_conversation',
 
-    'game.apps.GameConfig',
+    #game stuff
+    'main.apps.game.apps.GameConfig',
 )
 
 

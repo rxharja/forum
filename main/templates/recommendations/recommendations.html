@@ -2,36 +2,21 @@
 {% load static %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/rectheme.css' %}" />
-
+{% block content %}
 <div id="outer-box-rec">
   <div id="head-rec">
-    <h3>Recommendations for you {{ game.photo }}</h3>
+    <h1>Your Recommended Games</h1>
   </div>
   <div id="container-rec">
+    {% for g in game %}
     <div class="rec-card" id="card1">
-      <img src="{{ game.photo }}">
-      <p>Game Name</p>
-      <p>Genre</p>
+      <img class = "game-img" src="{{ g.get_photo }}" />
+      <p>{{ g.description }}</p>
+      <p>{{ g.genre }}</p>
+      <p>{{ g.rating }}</p>
+      <p>{{ g.complexity }}</p>
     </div>
-    <div class="rec-card" id="card2">
-      <img src="https://www.unsplash.it/150/150">
-      <p>Game Name</p>
-      <p>Genre</p>
-    </div>
-    <div class="rec-card" id="card3">
-      <img src="https://www.unsplash.it/150/150">
-      <p>Game Name</p>
-      <p>Genre</p>
-    </div>
-    <div class="rec-card" id="card4">
-      <img src="https://www.unsplash.it/150/150">
-      <p>Game Name</p>
-      <p>Genre</p>
-    </div>
-    <div class="rec-card" id="card5">
-      <img src="https://www.unsplash.it/150/150">
-      <p>Game Name</p>
-      <p>Genre</p>
-    </div>
+    {% endfor %}
   </div>
 </div>
+{% endblock content %}
