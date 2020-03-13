@@ -5,7 +5,6 @@
 {% block css %}
   {{ block.super }}
   <link rel="stylesheet" type="text/css" href="{% static 'css/theme.css' %}" />
-  <link rel="stylesheet" type="text/css" href="{% static 'css/rectheme.css' %}" />
 {% endblock css %}
 
 {% block header_collapse %}
@@ -34,7 +33,6 @@
 
 <div id="wrap">
   {{ block.super }}
-  {% include "recommendations/recommendations.html" %}
   <div id="push"></div>
 </div>
 <footer id="footer" class="py-2 bg-light">
