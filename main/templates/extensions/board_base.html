@@ -33,6 +33,7 @@
 
 <div id="wrap">
   {{ block.super }}
+  <a href="{% url 'Recommendations' %}?next=/" class="">{% trans "Your Recommended" %}</a>
   <div id="push"></div>
 </div>
 <footer id="footer" class="py-2 bg-light">

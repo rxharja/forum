@@ -17,9 +17,9 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
 
     # Apps
-    path('', include('main.apps.game.urls')),
     path('', include('main.apps.auth.urls')),
     path('', include(machina_urls)),
+    path('recommendations/', include('main.apps.game.urls')),
 ]
 
 if settings.DEBUG:

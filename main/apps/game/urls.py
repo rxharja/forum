@@ -3,5 +3,5 @@ from . import views
 
 
 urlpatterns = [
-    path('',views.games),
+    path('recommendations',views.games,name="Recommendations"),
 ]
