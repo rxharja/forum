@@ -78,7 +78,7 @@ def combine_features(row):
 def get_matrix():
     try:
         matrix_df = pd.read_csv(matrix_file,delimiter=",",header=None,index_col=False)
-        return [list(row) for row in matrix_df.values][1:]
+        return [list(row) for row in matrix_df.values]
     except IOError:
         #convert collection of text  to matrix of token counts
         count_matrix = CountVectorizer().fit_transform(df['combined_features'])
