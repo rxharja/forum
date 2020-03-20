@@ -8,8 +8,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 ''' Variables to change  '''
 #game to check similarity
-game_user_likes = "Catan"
-
+# game_user_likes = "Catan"
+user_id = 1
 #file to save cosine similarity matrix as to not build it again
 matrix_file = "./similarity_matrix.csv"
 
@@ -36,6 +36,17 @@ def get_index_from_title(title):
     return df[df['details.name'] == title]['index'].values[0]
 
 
+def get_board_most_posted(user_id):
+    try:
+        con = sqlite3.connect("db.sqlite3")
+        cursorObj = con.cursor()
+        cursorObj.execute("SELECT name FROM user_most_posted_game WHERE id == " + str(user_id))
+        return cursorObj.fetchone()[0]
+    except:
+        print("Database or table not found!")
+    finally:
+        con.close()
+
 #import boardgames table from sql database and return it as a pandas dataframe
 def get_table_from_sqlite():
     try:
@@ -45,7 +56,7 @@ def get_table_from_sqlite():
                                   WHERE "stats.usersrated" != 0
                                   AND "game.type" == "boardgame"
                                   ORDER BY "stats.usersrated" DESC
-                                  LIMIT 500;''',con)
+                                  LIMIT 1000;''',con)
         #numbers in incremental order needed to cosine similarity matrix to work
         df['index']=df.index
         #clean and process data first
@@ -90,6 +101,8 @@ def get_matrix():
 
 
 ''' Script '''
+#import game user likes from sql database
+game_user_likes = get_board_most_posted(user_id)
 #import table from sql database
 df = get_table_from_sqlite()
 
