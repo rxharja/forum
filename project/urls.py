@@ -19,7 +19,7 @@ urlpatterns = [
     # Apps
     path('', include('main.apps.auth.urls')),
     path('', include(machina_urls)),
-    path('recommendations/', include('main.apps.game.urls')),
+    path('recommendations/', include('main.apps.recommended.urls')),
 ]
 
 if settings.DEBUG:

@@ -12,17 +12,19 @@
 <script>
 </script>
 <div id="outer-box-rec">
+  {% load similarity_engine %}
+  {% load template_filters %}
+  {% similarity user.id as rec_games  %}
   <div id="head-rec">
-    <h1>Your Recommended Games</h1>
+    <h1>Because you like {{ rec_games|get_based_on:0 }}</h1>
   </div>
   <div id="container-rec">
-    {% for g in game %}
+    {% for index,game in rec_games.items %}
     <div class="rec-card" id="card1">
-      <img class = "game-img" src="{{ g.get_photo }}" />
-      <p>{{ g.description }}</p>
-      <p>{{ g.genre }}</p>
-      <p>{{ g.rating }}</p>
-      <p>{{ g.complexity }}</p>
+      <img src="{{ game.image }}" />
+      <p class="game-title">{{ game.game }}</p>
+      <p>Complexity: {{ game.difficulty }}</p>
+      <p>Rating: {{ game.rating }}</p>
     </div>
     {% endfor %}
   </div>

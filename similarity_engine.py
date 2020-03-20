@@ -5,11 +5,14 @@ import pandas as pd
 from csv import reader
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from django import template
+
 
 ''' Variables to change  '''
 #game to check similarity
 # game_user_likes = "Catan"
-user_id = 1
+user_id = {{auth_user.id}}
+print(user_id)
 #file to save cosine similarity matrix as to not build it again
 matrix_file = "./similarity_matrix.csv"
 
@@ -35,6 +38,15 @@ def get_title_from_index(index):
 def get_index_from_title(title):
     return df[df['details.name'] == title]['index'].values[0]
 
+
+def get_weight_from_index(index):
+    return df[df['index'] == index]['stats.averageweight'].values[0]
+
+def get_rating_from_index(index):
+    return df[df['index'] == index]['stats.average'].values[0]
+
+def get_description_from_index(index):
+    return df[df['index'] == index]['details.description'].values[0]
 
 def get_board_most_posted(user_id):
     try:
@@ -122,12 +134,32 @@ sorted_similar_games = sorted(similar_games, key= lambda x:x[1], reverse=True)[1
 # print(sorted_similar_games)
 
 #show top 5 most similar entries
-print("Your recommended games based on your interest in " + game_user_likes)
 i=0
+#data to push to sql database keeping track of recommendations
+# games_to_recommend = [user_id,game_user_likes]
+recommended_games_dict = {}
+print("Because you liked " + game_user_likes + "...\n")
 for game in sorted_similar_games:
-    if i > 5: break
-    print(get_title_from_index(game[0]))
-    i+=1
+    game_dict = {}
+    game_dict["user"] = user_id
+    game_dict["based_on"] = game_user_likes
+    if i > 4: break
+    if get_title_from_index(game[0]) != game_user_likes:
+        games_to_recommend.append(get_title_from_index(game[0]))
+        print("Game: " + get_title_from_index(game[0]))
+        game_dict["game"] = get_title_from_index(game[0])
+        # print("Description: " + get_description_from_index(game[0]))
+        # game_dict["description"] = get_description_from_index(game[0])
+        print("Difficulty: " + str(round(get_weight_from_index(game[0]),1)) + "/5")
+        game_dict["difficulty"] = str(round(get_weight_from_index(game[0]),1))+"/5"
+        print("Rating: " + str( round(get_rating_from_index(game[0]),1)) + "/10")
+        game_dict["rating"] = str(round(get_rating_from_index(game[0]),1))+"/5"
+        print("\n")
+        recommended_games_dict[i] = game_dict
+        i+=1
+
+print(recommended_games_dict[0]['based_on'])
+return recommended_games_dict[0]
 
 
 #data analysis, see where most high ratings and number of reviews lie

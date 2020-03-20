@@ -45,7 +45,7 @@ INSTALLED_APPS = (
     'apps.forum_conversation',
 
     #game stuff
-    'main.apps.game.apps.GameConfig',
+    'main.apps.recommended.apps.RecommendedConfig',
 )
 
 
