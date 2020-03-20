@@ -155,7 +155,7 @@ def similarity(id):
             # game_dict["description"] = get_description_from_index(game[0])
             game_dict["difficulty"] = str(round(get_weight_from_index(game[0]),1))+"/5"
             game_dict["rating"] = str(round(get_rating_from_index(game[0]),1))+"/10"
-            game_dict["image"] = get_image_from_index(game[0])[2:]
+            game_dict["image"] = get_image_from_index(game[0])
             recommended_games_dict[i] = game_dict
             i+=1
 
