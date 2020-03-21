@@ -1,6 +1,6 @@
 # import seaborn as sns
 # import matplotlib.pyplot as plt
-import sqlite3
+import sqlite3, random
 import pandas as pd
 from csv import reader
 from sklearn.feature_extraction.text import CountVectorizer
@@ -53,12 +53,22 @@ def similarity(id):
     def get_image_from_index(index):
         return df[df['index'] == index]['details.image'].values[0]
 
+    #queries views user_most_posted forum and user_subscribed_games to make a list of tuples
+    #each tuple is ("posted or subscribed",name of game)
     def get_board_most_posted(user_id):
         try:
+            games_to_rec = []
             con = sqlite3.connect("db.sqlite3")
             cursorObj = con.cursor()
             cursorObj.execute("SELECT name FROM user_most_posted_game WHERE id == " + str(user_id))
-            return cursorObj.fetchone()[0]
+            games_to_rec.append(('posted',cursorObj.fetchone()[0]))
+            cursorObj = con.cursor()
+            cursorObj.execute("SELECT name FROM user_subscribed_games WHERE id == " + str(user_id))
+            recs = cursorObj.fetchall()
+            for game in recs:
+                games_to_rec.append(('subscribed',game[0]))
+            print(games_to_rec)
+            return games_to_rec
         except:
             print("Database or table not found!")
         finally:
@@ -73,7 +83,7 @@ def similarity(id):
                                       WHERE "stats.usersrated" != 0
                                       AND "game.type" == "boardgame"
                                       ORDER BY "stats.usersrated" DESC
-                                      LIMIT 1000;''',con)
+                                      LIMIT 2500;''',con)
             #numbers in incremental order needed to cosine similarity matrix to work
             df['index']=df.index
             #clean and process data first
@@ -119,7 +129,9 @@ def similarity(id):
 
     ''' Script '''
     #import game user likes from sql database
-    game_user_likes = get_board_most_posted(user_id)
+    rec_games_list = random.choice(get_board_most_posted(user_id))
+    why_recommended = rec_games_list[0]
+    game_user_likes = rec_games_list[1]
     #import table from sql database
     df = get_table_from_sqlite()
 
@@ -159,4 +171,4 @@ def similarity(id):
             recommended_games_dict[i] = game_dict
             i+=1
 
-    return recommended_games_dict
+    return why_recommended,recommended_games_dict

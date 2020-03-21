@@ -8,17 +8,27 @@
 {% endblock css %}
 
 {% block content %}
-<script>
-</script>
+<div class="head-rec">
+  <h1>Your Badges</h1>
+  <p>badges go here</p>
+</div>
+<div class="head-rec">
+  <h1>Your Collection</h1>
+  <p>user collection goes here</p>
+</div>
 <div id="outer-box-rec">
   {% load similarity_engine %}
   {% load template_filters %}
   {% similarity user.id as rec_games  %}
-  <div id="head-rec">
-    <h1>Because you like {{ rec_games|get_based_on:0 }}</h1>
+  <div class="head-rec">
+    {% if rec_games.0 == 'posted' %}
+    <h1>Because you post in {{ rec_games.1|get_based_on:0 }}</h1>
+    {% elif rec_games.0 == 'subscribed' %}
+    <h1>Because you subscribe to {{ rec_games.1|get_based_on:0 }}</h1>
+    {% endif %}
   </div>
   <div id="container-rec">
-    {% for index,game in rec_games.items %}
+    {% for index,game in rec_games.1.items %}
     <div class="rec-card" id="card1">
       <img class="game-img" src="{{ game.image }}" />
       <h4 class="game-title">{{ game.game }}</h4>

@@ -1,6 +1,7 @@
 # import seaborn as sns
 # import matplotlib.pyplot as plt
 import sqlite3
+import random
 import pandas as pd
 from csv import reader
 from sklearn.feature_extraction.text import CountVectorizer
@@ -11,7 +12,7 @@ from django import template
 ''' Variables to change  '''
 #game to check similarity
 # game_user_likes = "Catan"
-user_id = {{auth_user.id}}
+user_id = 6
 print(user_id)
 #file to save cosine similarity matrix as to not build it again
 matrix_file = "./similarity_matrix.csv"
@@ -50,14 +51,23 @@ def get_description_from_index(index):
 
 def get_board_most_posted(user_id):
     try:
+        games_to_rec = []
         con = sqlite3.connect("db.sqlite3")
         cursorObj = con.cursor()
         cursorObj.execute("SELECT name FROM user_most_posted_game WHERE id == " + str(user_id))
-        return cursorObj.fetchone()[0]
+        games_to_rec.append(('posted',cursorObj.fetchone()[0]))
+        cursorObj = con.cursor()
+        cursorObj.execute("SELECT name FROM user_subscribed_games WHERE id == " + str(user_id))
+        recs = cursorObj.fetchall()
+        for game in recs:
+            games_to_rec.append(('subscribed',game[0]))
+        print(games_to_rec)
+        return games_to_rec
     except:
         print("Database or table not found!")
     finally:
         con.close()
+
 
 #import boardgames table from sql database and return it as a pandas dataframe
 def get_table_from_sqlite():
@@ -68,7 +78,7 @@ def get_table_from_sqlite():
                                   WHERE "stats.usersrated" != 0
                                   AND "game.type" == "boardgame"
                                   ORDER BY "stats.usersrated" DESC
-                                  LIMIT 1000;''',con)
+                                  LIMIT 2500;''',con)
         #numbers in incremental order needed to cosine similarity matrix to work
         df['index']=df.index
         #clean and process data first
@@ -114,7 +124,10 @@ def get_matrix():
 
 ''' Script '''
 #import game user likes from sql database
-game_user_likes = get_board_most_posted(user_id)
+rec_games_list = random.choice(get_board_most_posted(user_id))
+why_recommended = rec_games_list[0]
+game_user_likes = rec_games_list[1]
+
 #import table from sql database
 df = get_table_from_sqlite()
 
@@ -145,7 +158,7 @@ for game in sorted_similar_games:
     game_dict["based_on"] = game_user_likes
     if i > 4: break
     if get_title_from_index(game[0]) != game_user_likes:
-        games_to_recommend.append(get_title_from_index(game[0]))
+        # games_to_recommend.append(get_title_from_index(game[0]))
         print("Game: " + get_title_from_index(game[0]))
         game_dict["game"] = get_title_from_index(game[0])
         # print("Description: " + get_description_from_index(game[0]))
@@ -159,7 +172,7 @@ for game in sorted_similar_games:
         i+=1
 
 print(recommended_games_dict[0]['based_on'])
-return recommended_games_dict[0]
+# return recommended_games_dict[0]
 
 
 #data analysis, see where most high ratings and number of reviews lie
