@@ -31,6 +31,7 @@ INSTALLED_APPS = (
     # Machina apps
     'machina',
     'machina.apps.forum',
+
     #'machina.apps.forum_conversation',
     'machina.apps.forum_conversation.forum_attachments',
     'machina.apps.forum_conversation.forum_polls',
@@ -45,7 +46,7 @@ INSTALLED_APPS = (
     'apps.forum_conversation',
 
     #game stuff
-    'main.apps.recommended.apps.RecommendedConfig',
+    'main.apps.collection.apps.CollectionConfig',
 )
 
 
@@ -147,7 +148,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': (
             str(PROJECT_PATH / 'main' / 'templates' / 'extensions'),
-            str(PROJECT_PATH / 'main' / 'templates' / 'recommendations'),
+            str(PROJECT_PATH / 'main' / 'templates' / 'dashboard'),
             str(PROJECT_PATH / 'main' / 'templates'),
             MACHINA_MAIN_TEMPLATE_DIR,
         ),

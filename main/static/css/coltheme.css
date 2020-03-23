@@ -1,0 +1,17 @@
+#container {
+ display: flex;
+ flex-direction: row;
+ justify-content: space-between;
+}
+
+#sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%;
+}
+
+img {
+  width: 300px;
+  margin: 2em;
+}

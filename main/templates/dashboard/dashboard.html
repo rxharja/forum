@@ -1,0 +1,57 @@
+{% extends "machina/forum/index.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block css %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/rectheme.css' %}" />
+{% endblock css %}
+
+{% block content %}
+<div id="outer-box-rec">
+  <a href="{% url 'search' %}" class="">{% trans "Search for Games" %}</a>
+  <div class="head-rec">
+    {% load show_collections %}
+    <h1>Your Collections - <a href="{% url 'collection_view'%}">Manage</a></h1>
+  </div>
+    <div class="container-rec">
+    {% top_collections user.id as cols %}
+    {% if cols == None %}
+    <p>No collections to show, Try searching for some?</p>
+    {% else %}
+    {% for col_id,set in cols.items %}
+      <div class="col-wrapper">
+      <div class="col-card rec-card" id="">
+      {% for set_id,entry in set.items %}
+      <img class="game-img" src="{{ entry.image }}" />
+      {% endfor %}
+    </div>
+        <h4 class="col-title">{{ set.0.col_name }}</h4>
+        <a href="{{ collection.get_absolute_url }}">Go</a>
+      </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+  {% load similarity_engine %}
+  {% load template_filters %}
+  {% similarity user.id as rec_games  %}
+  <div class="head-rec">
+    {% if rec_games.0 == 'posted' %}
+    <h1>Recommendations based on your posts in {{ rec_games.1|get_based_on:0 }}</h1>
+    {% elif rec_games.0 == 'subscribed' %}
+    <h1>Recommendations based on your subscriptions in {{ rec_games.1|get_based_on:0 }}</h1>
+    {% endif %}
+  </div>
+  <div class="container-rec">
+    {% for index,game in rec_games.1.items %}
+    <div class="rec-card" id="card1">
+      <img class="game-img" src="{{ game.image }}" />
+      <h4 class="game-title">{{ game.game }}</h4>
+      <p>Complexity: {{ game.difficulty }}</p>
+      <p>Rating: {{ game.rating }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock content %}
