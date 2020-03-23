@@ -1,19 +1,20 @@
 # import seaborn as sns
 # import matplotlib.pyplot as plt
-import sqlite3
-import random
+import sqlite3, random
 import pandas as pd
 from csv import reader
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from django import template
-
-
+# from django import template
+#
+# register = template.Library()
+#
+# @register.simple_tag
+id = 8
+print(id)
 ''' Variables to change  '''
 #game to check similarity
-# game_user_likes = "Catan"
-user_id = 6
-print(user_id)
+user_id = id
 #file to save cosine similarity matrix as to not build it again
 matrix_file = "./similarity_matrix.csv"
 
@@ -49,25 +50,43 @@ def get_rating_from_index(index):
 def get_description_from_index(index):
     return df[df['index'] == index]['details.description'].values[0]
 
+def get_image_from_index(index):
+    return df[df['index'] == index]['details.image'].values[0]
+
+#queries views user_most_posted forum and user_subscribed_games to make a list of tuples
+#each tuple is ("posted or subscribed",name of game)
 def get_board_most_posted(user_id):
+    games_to_rec = []
+    con = sqlite3.connect("db.sqlite3")
     try:
-        games_to_rec = []
-        con = sqlite3.connect("db.sqlite3")
         cursorObj = con.cursor()
         cursorObj.execute("SELECT name FROM user_most_posted_game WHERE id == " + str(user_id))
         games_to_rec.append(('posted',cursorObj.fetchone()[0]))
+    except:
+        print("user_most_posted_game table not found!")
+
+    try:
         cursorObj = con.cursor()
         cursorObj.execute("SELECT name FROM user_subscribed_games WHERE id == " + str(user_id))
         recs = cursorObj.fetchall()
         for game in recs:
             games_to_rec.append(('subscribed',game[0]))
-        print(games_to_rec)
-        return games_to_rec
     except:
-        print("Database or table not found!")
+        print("user_subscribed_games not found!")
+
+    try:
+        cursorObj = con.cursor()
+        cursorObj.execute("SELECT game_name FROM collection_collection_has_games WHERE user_id == " + str(user_id))
+        cols = cursorObj.fetchall()
+        for game in cols:
+            games_to_rec.append(('owned',game[0]))
+        # print(games_to_rec)
+    except:
+        print("collection database not found!")
+
     finally:
         con.close()
-
+        return games_to_rec
 
 #import boardgames table from sql database and return it as a pandas dataframe
 def get_table_from_sqlite():
@@ -123,14 +142,20 @@ def get_matrix():
 
 
 ''' Script '''
-#import game user likes from sql database
-rec_games_list = random.choice(get_board_most_posted(user_id))
-why_recommended = rec_games_list[0]
-game_user_likes = rec_games_list[1]
-
 #import table from sql database
 df = get_table_from_sqlite()
 
+rec_games_list = []
+#import game user likes from sql database
+rec_games_list.extend(get_board_most_posted(user_id))
+rec_game = random.choice(rec_games_list)
+rand_num = random.randint(0,100)
+#add a wildcard
+# rec_games_list.append( ("random", get_title_from_index( random.randrange(0,len(df)))))
+if rand_num <= 10: rec_game = ("random",get_title_from_index(random.randrange(0,len(df))))
+why_recommended = rec_game[0]
+game_user_likes = rec_game[1]
+print(rec_game,rec_games_list)
 #import cosine similarity matrix
 cosine_sim = get_matrix()
 
@@ -151,40 +176,22 @@ i=0
 #data to push to sql database keeping track of recommendations
 # games_to_recommend = [user_id,game_user_likes]
 recommended_games_dict = {}
+games_to_skip = [game[1] for game in rec_games_list]
+print(games_to_skip)
 print("Because you liked " + game_user_likes + "...\n")
 for game in sorted_similar_games:
     game_dict = {}
     game_dict["user"] = user_id
     game_dict["based_on"] = game_user_likes
     if i > 4: break
-    if get_title_from_index(game[0]) != game_user_likes:
+    if (get_title_from_index(game[0]) != game_user_likes) and (get_title_from_index(game[0]) not in games_to_skip):
         # games_to_recommend.append(get_title_from_index(game[0]))
-        print("Game: " + get_title_from_index(game[0]))
         game_dict["game"] = get_title_from_index(game[0])
-        # print("Description: " + get_description_from_index(game[0]))
         # game_dict["description"] = get_description_from_index(game[0])
-        print("Difficulty: " + str(round(get_weight_from_index(game[0]),1)) + "/5")
         game_dict["difficulty"] = str(round(get_weight_from_index(game[0]),1))+"/5"
-        print("Rating: " + str( round(get_rating_from_index(game[0]),1)) + "/10")
-        game_dict["rating"] = str(round(get_rating_from_index(game[0]),1))+"/5"
-        print("\n")
+        game_dict["rating"] = str(round(get_rating_from_index(game[0]),1))+"/10"
+        game_dict["image"] = get_image_from_index(game[0])
         recommended_games_dict[i] = game_dict
         i+=1
 
-print(recommended_games_dict[0]['based_on'])
-# return recommended_games_dict[0]
-
-
-#data analysis, see where most high ratings and number of reviews lie
-
-#get count of rows and columns
-# print(df.shape)
-
-#build new dataframe from name, stats, and how many rated
-# game_ratings = df[['details.name','stats.average','stats.usersrated']]
-# game_ratings.sort_values(by=["stats.usersrated"],ascending=False).head()
-
-#visualize the data in a histogram and a jointplot
-# plt.figure(figsize=(10,4))
-# game_ratings['stats.average'].hist(bins=50)
-# sns.jointplot(x="stats.average",y="stats.usersrated",data=game_ratings,alpha=0.5)
+print(why_recommended,recommended_games_dict)

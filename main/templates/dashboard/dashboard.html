@@ -40,6 +40,10 @@
     <h1>Recommendations based on your posts in {{ rec_games.1|get_based_on:0 }}</h1>
     {% elif rec_games.0 == 'subscribed' %}
     <h1>Recommendations based on your subscriptions in {{ rec_games.1|get_based_on:0 }}</h1>
+    {% elif rec_games.0 == 'owned' %}
+    <h1>Recommendations based you owning {{ rec_games.1|get_based_on:0 }}</h1>
+    {% elif rec_games.0 == 'random' %}
+    <h1>Some brand new games you may like based on {{ rec_games.1|get_based_on:0 }}</h1>
     {% endif %}
   </div>
   <div class="container-rec">

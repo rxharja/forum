@@ -56,23 +56,37 @@ def similarity(id):
     #queries views user_most_posted forum and user_subscribed_games to make a list of tuples
     #each tuple is ("posted or subscribed",name of game)
     def get_board_most_posted(user_id):
+        games_to_rec = []
+        con = sqlite3.connect("db.sqlite3")
         try:
-            games_to_rec = []
-            con = sqlite3.connect("db.sqlite3")
             cursorObj = con.cursor()
             cursorObj.execute("SELECT name FROM user_most_posted_game WHERE id == " + str(user_id))
             games_to_rec.append(('posted',cursorObj.fetchone()[0]))
+        except:
+            print("user_most_posted_game table not found!")
+
+        try:
             cursorObj = con.cursor()
             cursorObj.execute("SELECT name FROM user_subscribed_games WHERE id == " + str(user_id))
             recs = cursorObj.fetchall()
             for game in recs:
                 games_to_rec.append(('subscribed',game[0]))
-            print(games_to_rec)
-            return games_to_rec
         except:
-            print("Database or table not found!")
+            print("user_subscribed_games not found!")
+
+        try:
+            cursorObj = con.cursor()
+            cursorObj.execute("SELECT game_name FROM collection_collection_has_games WHERE user_id == " + str(user_id))
+            cols = cursorObj.fetchall()
+            for game in cols:
+                games_to_rec.append(('owned',game[0]))
+            # print(games_to_rec)
+        except:
+            print("collection database not found!")
+
         finally:
             con.close()
+            return games_to_rec
 
     #import boardgames table from sql database and return it as a pandas dataframe
     def get_table_from_sqlite():
@@ -128,13 +142,20 @@ def similarity(id):
 
 
     ''' Script '''
-    #import game user likes from sql database
-    rec_games_list = random.choice(get_board_most_posted(user_id))
-    why_recommended = rec_games_list[0]
-    game_user_likes = rec_games_list[1]
     #import table from sql database
     df = get_table_from_sqlite()
 
+    rec_games_list = []
+    #import game user likes from sql database
+    rec_games_list.extend(get_board_most_posted(user_id))
+    rec_game = random.choice(rec_games_list)
+    rand_num = random.randint(0,100)
+    #add a wildcard
+    # rec_games_list.append( ("random", get_title_from_index( random.randrange(0,len(df)))))
+    if rand_num <= 10: rec_game = ("random",get_title_from_index(random.randrange(0,len(df))))
+    why_recommended = rec_game[0]
+    game_user_likes = rec_game[1]
+    print(rec_game,rec_games_list)
     #import cosine similarity matrix
     cosine_sim = get_matrix()
 
@@ -155,13 +176,16 @@ def similarity(id):
     #data to push to sql database keeping track of recommendations
     # games_to_recommend = [user_id,game_user_likes]
     recommended_games_dict = {}
+    #games we plan not not recommending to user based on their patterns
+    games_to_skip = [game[1] for game in rec_games_list]
     print("Because you liked " + game_user_likes + "...\n")
     for game in sorted_similar_games:
         game_dict = {}
         game_dict["user"] = user_id
         game_dict["based_on"] = game_user_likes
         if i > 4: break
-        if get_title_from_index(game[0]) != game_user_likes:
+        #remove games that we either own or post in a lot in our recommendations, since we already know about them
+        if (get_title_from_index(game[0]) != game_user_likes) and (get_title_from_index(game[0]) not in games_to_skip):
             # games_to_recommend.append(get_title_from_index(game[0]))
             game_dict["game"] = get_title_from_index(game[0])
             # game_dict["description"] = get_description_from_index(game[0])
