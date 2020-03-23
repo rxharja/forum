@@ -28,10 +28,6 @@ chardet==3.0.4
 Click==7.0
 cloudpickle==1.2.2
 colorama==0.4.1
-conda==4.8.2
-conda-build==3.18.9
-conda-package-handling==1.6.0
-conda-verify==3.4.2
 contextlib2==0.6.0
 cryptography==2.7
 cycler==0.10.0
@@ -53,7 +49,6 @@ entrypoints==0.3
 et-xmlfile==1.0.1
 fastcache==1.1.0
 filelock==3.0.12
-Flask==1.1.1
 fsspec==0.5.2
 future==0.17.1
 gevent==1.4.0
