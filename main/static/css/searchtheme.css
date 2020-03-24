@@ -1,0 +1,21 @@
+.game-img {
+  width: 200px;
+
+}
+
+.info-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.results-box {
+  display: flex;
+  flex-direction: row;
+  margin: 2em;
+  border: 1px solid black;
+}
+
+.img-box {
+  margin: 1em;
+}

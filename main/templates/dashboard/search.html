@@ -1,0 +1,116 @@
+{% extends "machina/forum/index.html" %}
+{% load i18n %}
+{% load static %}
+{% load js %}
+{% load search_games %}
+{% load template_filters %}
+
+{% block css %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/searchtheme.css' %}" />
+  <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/rectheme.css' %}" /> -->
+{% endblock css %}
+
+{% block content %}
+<div id="">
+  <form method="POST" action=".">
+    {% csrf_token %}
+      <input type="text" name="fcal" value="{{F}}" />
+      <input type="submit" name="search_button" value="Search" />
+  </form>
+  <input id="collection-name" name="collection_name" value="my first collection"/>
+  <button value="idk" id="add-button" name="add_button">Add Collection</button>
+  <div id="collections">
+    <h4>Collections:</h4>
+    <div id="display-cols"></div>
+  </div>
+  <p id="success"></p>
+  <div id="">
+    {% if searchquery %}
+    {% search searchquery as query %}
+    {% endif %}
+    {% for index,game in query.items %}
+    <div class="results-box">
+      {% jsonify game as js_game %}
+      <input class="check-game" type="checkbox" onclick="" name="add_to_collection" value="{{ js_game }}" />
+      <label for="add_to_collection">Add to collection</label>
+      <div class="img-box">
+      <img class="game-img" src="{{ game.image }}" />
+      </div>
+      <div id="{{game.id}}" class="info-box">
+        <h4 class="game-title">{{ game.game }}</h4>
+
+        <p>Rating: {{ game.rating }}/10</p>
+        <p>Complexity: {{ game.complexity }}/5</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% if test %}
+  {{test}}
+  {% endif %}
+</div>
+
+<script>
+
+  let cols = {{collection|safe}}
+  let games = {{collection_has_games|safe}}
+  cols.forEach((col) => {
+    name = col.fields.collection_name
+    let str = "<button class=\".add-button\" value=\""+name+"\">Add to " + name + "</button>"
+    $("#display-cols").append(str);
+  });
+
+
+  $("#display-cols").on('click', "button", function(event) {
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    let package = {}
+    const userId = {{user.id}};
+    const collectionName = $(this).val()
+    let i = 0
+    $('.check-game:checkbox:checked').map(function(){
+      game = JSON.parse(this.value);
+      $.extend(game,{'userId':userId});
+      $.extend(game,{'collection_name':collectionName});
+      num = i.toString();
+      package[num] = game
+      i++;
+    });
+    console.log(package);
+
+    $.ajax({
+        type : "GET",
+        url: '',
+        data : package,
+        success: function (data) {
+          $("#success").text("Successfully added!");
+        }
+    });
+  });
+
+  $("#add-button").on('click', function(event) {
+    let colName = $("#collection-name").val();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    let presentCols = [];
+    let newCol = [];
+    $("#display-cols").children().each(function(){
+      presentCols.push($(this).val());
+    });
+    if (!presentCols.includes(colName)){
+      newCol.push({{user.id}},colName)
+    }
+    $.ajax({
+        type : "POST",
+        url: '',
+        data : {'new_col':newCol},
+        success: function (data) {
+          let str = "<button class=\".add-button\" value=\""+colName+"\">Add to " + colName + "</button>"
+          $("#display-cols").append(str);
+        }
+    });
+  });
+</script>
+
+{% endblock content %}
