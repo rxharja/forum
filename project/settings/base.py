@@ -6,7 +6,6 @@ from machina import MACHINA_MAIN_STATIC_DIR
 from machina import MACHINA_MAIN_TEMPLATE_DIR
 
 import django_heroku
-django_heroku.settings(locals())
 
 # APP CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -301,3 +300,5 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 
 PROJECT_PATH = pathlib.Path(__file__).parents[2]
+
+django_heroku.settings(locals())
