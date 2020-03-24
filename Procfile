@@ -1,1 +1,1 @@
-web: gunicorn forum.wsgi --log-file -
+web: gunicorn forum.forum.wsgi --log-file -
