@@ -38,7 +38,6 @@ Dj-database-url==0.5.0
 Django==2.2.10
 django-debug-toolbar==2.2
 django-haystack==2.8.1
-django-heroku==0.3.1
 django-js-asset==1.2.2
 django-machina==1.0.2
 django-mptt==0.11.0
