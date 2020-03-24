@@ -34,9 +34,11 @@ dask==2.5.2
 decorator==4.4.0
 defusedxml==0.6.0
 distributed==2.5.2
+Dj-database-url==0.5.0
 Django==2.2.10
 django-debug-toolbar==2.2
 django-haystack==2.8.1
+django-heroku==0.3.1
 django-js-asset==1.2.2
 django-machina==1.0.2
 django-mptt==0.11.0
@@ -117,6 +119,7 @@ ply==3.11
 prometheus-client==0.7.1
 prompt-toolkit==2.0.10
 psutil==5.6.3
+psycopg2==2.8.4
 ptyprocess==0.6.0
 py==1.8.0
 pycodestyle==2.5.0

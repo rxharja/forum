@@ -1,5 +1,5 @@
 import pathlib
-
+import django_heroku
 from django.urls import reverse_lazy
 
 from machina import MACHINA_MAIN_STATIC_DIR
@@ -294,3 +294,5 @@ MACHINA_DEFAULT_AUTHENTICATED_USER_FORUM_PERMISSIONS = [
     'can_vote_in_polls',
     'can_download_file',
 ]
+
+django_heroku.settings(locals())
