@@ -122,7 +122,7 @@ LANGUAGE_CODE = 'en'
 SITE_ID = 1
 
 # See https://docs.djangoproject.com/en/1.6/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['desolate-woodland-72944.herokuapp.com','0.0.0.0','127.0.0.1']
+ALLOWED_HOSTS = ['young-wildwood-67631.herokuapp.com','0.0.0.0','127.0.0.1']
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
 USE_I18N = True
