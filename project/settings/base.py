@@ -294,7 +294,7 @@ MACHINA_DEFAULT_AUTHENTICATED_USER_FORUM_PERMISSIONS = [
     'can_vote_in_polls',
     'can_download_file',
 ]
-
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import django_heroku
 django_heroku.settings(locals())
