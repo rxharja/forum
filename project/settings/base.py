@@ -179,7 +179,7 @@ TEMPLATES = [
 # ------------------------------------------------------------------------------
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = str(PROJECT_PATH / 'public' / 'static')
+STATIC_ROOT = str(PROJECT_PATH / 'main' / 'static')
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 STATIC_URL = '/static/'
