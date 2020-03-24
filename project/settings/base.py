@@ -113,7 +113,7 @@ LANGUAGE_CODE = 'en'
 SITE_ID = 1
 
 # See https://docs.djangoproject.com/en/1.6/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['pacific-reef-19583.herokuapp.com','0.0.0.0','127.0.0.1']
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
 USE_I18N = True

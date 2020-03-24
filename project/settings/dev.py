@@ -25,7 +25,7 @@ DEBUG = True
 # GENERAL CONFIGURATION
 # ------------------------------------------------------------------------------
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', ]
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost','pacific-reef-19583.herokuapp.com','0.0.0.0']
 INTERNAL_IPS = ['127.0.0.1', ]
 
 
