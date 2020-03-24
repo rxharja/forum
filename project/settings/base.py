@@ -93,6 +93,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': str(PROJECT_PATH / 'db.sqlite3'),
+    },
+    'postgresql': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': str(PROJECT_PATH / 'db.pgsql'),
     }
 }
 
