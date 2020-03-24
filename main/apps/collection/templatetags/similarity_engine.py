@@ -60,14 +60,14 @@ def similarity(id):
         con = sqlite3.connect("db.sqlite3")
         try:
             cursorObj = con.cursor()
-            cursorObj.execute("SELECT name FROM user_most_posted_game WHERE id == " + str(user_id))
+            cursorObj.execute("SELECT name FROM user_most_posted_game WHERE id = " + str(user_id))
             games_to_rec.append(('posted',cursorObj.fetchone()[0]))
         except:
             print("user_most_posted_game table not found!")
 
         try:
             cursorObj = con.cursor()
-            cursorObj.execute("SELECT name FROM user_subscribed_games WHERE id == " + str(user_id))
+            cursorObj.execute("SELECT name FROM user_subscribed_games WHERE id = " + str(user_id))
             recs = cursorObj.fetchall()
             for game in recs:
                 games_to_rec.append(('subscribed',game[0]))
@@ -76,7 +76,7 @@ def similarity(id):
 
         try:
             cursorObj = con.cursor()
-            cursorObj.execute("SELECT game_name FROM collection_collection_has_games WHERE user_id == " + str(user_id))
+            cursorObj.execute("SELECT game_name FROM collection_collection_has_games WHERE user_id = " + str(user_id))
             cols = cursorObj.fetchall()
             for game in cols:
                 games_to_rec.append(('owned',game[0]))
@@ -95,7 +95,7 @@ def similarity(id):
             cursorObj = con.cursor()
             df = pd.read_sql_query('''SELECT * FROM BoardGames
                                       WHERE "stats.usersrated" != 0
-                                      AND "game.type" == "boardgame"
+                                      AND "game.type" == 'boardgame'
                                       ORDER BY "stats.usersrated" DESC
                                       LIMIT 2500;''',con)
             #numbers in incremental order needed to cosine similarity matrix to work

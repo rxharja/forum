@@ -11,7 +11,7 @@ def search(game_query):
         try:
             con = sqlite3.connect("db.sqlite3")
             cursorObj = con.cursor()
-            cursorObj.execute("SELECT \"details.name\",\"details.description\",\"stats.average\",\"stats.averageweight\",\"details.image\",\"game.id\" FROM BoardGames WHERE \"details.name\" like \"%" + game_query + "%\" ORDER BY \"stats.usersrated\" DESC LIMIT 2500;")
+            cursorObj.execute("SELECT \"details.name\",\"details.description\",\"stats.average\",\"stats.averageweight\",\"details.image\",\"game.id\" FROM boardgames WHERE LOWER(\"details.name\") like LOWER(\'%" + game_query + "%\') ORDER BY \"stats.usersrated\" DESC LIMIT 2500;")
             return cursorObj.fetchall()
         except:
             print("Sorry no database found!")

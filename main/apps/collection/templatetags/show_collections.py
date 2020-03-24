@@ -9,7 +9,7 @@ def top_collections(user_id):
         try:
             con = sqlite3.connect("db.sqlite3")
             cursorObj = con.cursor()
-            cursorObj.execute("SELECT collection_name FROM collection_collection WHERE user_id =="+str(user_id))
+            cursorObj.execute("SELECT collection_name FROM collection_collection WHERE user_id="+str(user_id))
             return cursorObj.fetchall()
         except:
             print("Sorry database not found!")
@@ -20,7 +20,7 @@ def top_collections(user_id):
         try:
             con = sqlite3.connect("db.sqlite3")
             cursorObj = con.cursor()
-            cursorObj.execute('SELECT * FROM collection_collection_has_games WHERE collection_name == \"'+ name + '\" AND user_id=='+str(user_id)+ ' LIMIT 6')
+            cursorObj.execute('SELECT * FROM collection_collection_has_games WHERE collection_name=\''+ name + '\' AND user_id='+str(user_id)+ ' LIMIT 6')
             return cursorObj.fetchall()
         except:
             print("Sorry database not found!")
