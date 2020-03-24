@@ -1,5 +1,5 @@
 import pathlib
-import django_heroku
+import os
 from django.urls import reverse_lazy
 
 from machina import MACHINA_MAIN_STATIC_DIR
@@ -179,7 +179,7 @@ TEMPLATES = [
 # ------------------------------------------------------------------------------
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = str(PROJECT_PATH / 'main' / 'static')
+STATIC_ROOT = str(PROJECT_PATH / 'public' / 'static')
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 STATIC_URL = '/static/'
@@ -295,4 +295,6 @@ MACHINA_DEFAULT_AUTHENTICATED_USER_FORUM_PERMISSIONS = [
     'can_download_file',
 ]
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import django_heroku
 django_heroku.settings(locals())
