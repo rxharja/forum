@@ -1,1 +1,1 @@
-web: forum.wsgi
+web: forum.wsgi --log-file -

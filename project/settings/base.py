@@ -110,7 +110,7 @@ LANGUAGE_CODE = 'en'
 SITE_ID = 1
 
 # See https://docs.djangoproject.com/en/1.6/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['https://protected-spire-03074.herokuapp.com/']
+ALLOWED_HOSTS = ['0.0.0.0','https://protected-spire-03074.herokuapp.com/','.herokuapp.com']
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
 USE_I18N = True
