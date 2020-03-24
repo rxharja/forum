@@ -7,6 +7,10 @@ from machina import MACHINA_MAIN_TEMPLATE_DIR
 
 import django_heroku
 
+PROJECT_PATH = pathlib.Path(__file__).parents[2]
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 # APP CONFIGURATION
 # ------------------------------------------------------------------------------
 
@@ -293,12 +297,7 @@ MACHINA_DEFAULT_AUTHENTICATED_USER_FORUM_PERMISSIONS = [
     'can_vote_in_polls',
     'can_download_file',
 ]
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-
-
-PROJECT_PATH = pathlib.Path(__file__).parents[2]
 
 django_heroku.settings(locals())
