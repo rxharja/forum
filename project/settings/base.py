@@ -94,6 +94,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME':'db_psql',
         'PORT':'5432',
+        'HOST':'localhost'
     },
     'mysql': {
         'ENGINE': 'django.db.backends.sqlite3',

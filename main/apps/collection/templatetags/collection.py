@@ -1,13 +1,18 @@
 import psycopg2
+import urllib.parse as urlparse
+import os
 from django import template
 
 register = template.Library()
 
 @register.simple_tag
 def one_collection(user_id):
+    url = urlparse.urlparse(os.environ['DATABASE_URL'])
+    dbname = url.path[1:]
+    port = url.port
     def get_collections(user_id):
         try:
-            con = psycopg2.connect("dbname=db_psql port=5432")
+            con = psycopg2.connect(dbname=dbname,port=port)
             cursorObj = con.cursor()
             cursorObj.execute("SELECT collection_name FROM collection_collection WHERE user_id ="+str(user_id))
             return cursorObj.fetchall()
@@ -18,7 +23,7 @@ def one_collection(user_id):
 
     def get_collection_details(name,user_id):
         try:
-            con = psycopg2.connect("dbname=db_psql port=5432")
+            con = psycopg2.connect(dbname=dbname,port=port)
             cursorObj = con.cursor()
             cursorObj.execute('SELECT * FROM user_collections WHERE collection_name = \"'+ name + '\" AND user_id='+str(user_id))
             return cursorObj.fetchone()

@@ -1,6 +1,8 @@
 # import seaborn as sns
 # import matplotlib.pyplot as plt
 import psycopg2, random
+import urllib.parse as urlparse
+import os
 import pandas as pd
 from csv import reader
 from sklearn.feature_extraction.text import CountVectorizer
@@ -11,6 +13,10 @@ register = template.Library()
 
 @register.simple_tag
 def similarity(id):
+def search(game_query):
+    url = urlparse.urlparse(os.environ['DATABASE_URL'])
+    dbname = url.path[1:]
+    port = url.port
     print(id)
     ''' Variables to change  '''
     #game to check similarity
@@ -57,7 +63,7 @@ def similarity(id):
     #each tuple is ("posted or subscribed",name of game)
     def get_board_most_posted(user_id):
         games_to_rec = []
-        con = psycopg2.connect("dbname=db_psql port=5432")
+        con = psycopg2.connect(dbname=dbname,port=port)
         try:
             cursorObj = con.cursor()
             cursorObj.execute("SELECT name FROM user_most_posted_game WHERE id=" + str(user_id))
@@ -91,7 +97,7 @@ def similarity(id):
     #import boardgames table from sql database and return it as a pandas dataframe
     def get_table_from_sqlite():
         try:
-            con = psycopg2.connect("dbname=db_psql port=5432")
+            con = psycopg2.connect(dbname=dbname,port=port)
             cursorObj = con.cursor()
             df = pd.read_sql_query('''SELECT * FROM boardgames
                                       WHERE "stats.usersrated"!=0

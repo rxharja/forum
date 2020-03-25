@@ -1,15 +1,20 @@
 import psycopg2
+import urllib.parse as urlparse
+import os
 from django import template
 
 register = template.Library()
 
 @register.simple_tag
 def search(game_query):
+    url = urlparse.urlparse(os.environ['DATABASE_URL'])
+    dbname = url.path[1:]
+    port = url.port
     if game_query == '':
         return "No Search";
     def search_game(game_query):
         try:
-            con = psycopg2.connect("dbname=db_psql port=5432")
+            con = psycopg2.connect(dbname=dbname,port=port)
             cursorObj = con.cursor()
             cursorObj.execute("SELECT \"details.name\",\"details.description\",\"stats.average\",\"stats.averageweight\",\"details.image\",\"game.id\" FROM boardgames WHERE LOWER(\"details.name\") like LOWER(\'%" + game_query + "%\') ORDER BY \"stats.usersrated\" DESC LIMIT 2500;")
             return cursorObj.fetchall()
