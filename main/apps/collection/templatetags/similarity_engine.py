@@ -1,6 +1,6 @@
 # import seaborn as sns
 # import matplotlib.pyplot as plt
-import sqlite3, random
+import psycopg2, random
 import pandas as pd
 from csv import reader
 from sklearn.feature_extraction.text import CountVectorizer
@@ -57,17 +57,17 @@ def similarity(id):
     #each tuple is ("posted or subscribed",name of game)
     def get_board_most_posted(user_id):
         games_to_rec = []
-        con = sqlite3.connect("db.sqlite3")
+        con = psycopg2.connect("dbname=db_psql port=5432")
         try:
             cursorObj = con.cursor()
-            cursorObj.execute("SELECT name FROM user_most_posted_game WHERE id = " + str(user_id))
+            cursorObj.execute("SELECT name FROM user_most_posted_game WHERE id=" + str(user_id))
             games_to_rec.append(('posted',cursorObj.fetchone()[0]))
         except:
             print("user_most_posted_game table not found!")
 
         try:
             cursorObj = con.cursor()
-            cursorObj.execute("SELECT name FROM user_subscribed_games WHERE id = " + str(user_id))
+            cursorObj.execute("SELECT name FROM user_subscribed_games WHERE id=" + str(user_id))
             recs = cursorObj.fetchall()
             for game in recs:
                 games_to_rec.append(('subscribed',game[0]))
@@ -76,7 +76,7 @@ def similarity(id):
 
         try:
             cursorObj = con.cursor()
-            cursorObj.execute("SELECT game_name FROM collection_collection_has_games WHERE user_id = " + str(user_id))
+            cursorObj.execute("SELECT game_name FROM collection_collection_has_games WHERE user_id=" + str(user_id))
             cols = cursorObj.fetchall()
             for game in cols:
                 games_to_rec.append(('owned',game[0]))
@@ -91,11 +91,11 @@ def similarity(id):
     #import boardgames table from sql database and return it as a pandas dataframe
     def get_table_from_sqlite():
         try:
-            con = sqlite3.connect("db.sqlite3")
+            con = psycopg2.connect("dbname=db_psql port=5432")
             cursorObj = con.cursor()
-            df = pd.read_sql_query('''SELECT * FROM BoardGames
-                                      WHERE "stats.usersrated" != 0
-                                      AND "game.type" == 'boardgame'
+            df = pd.read_sql_query('''SELECT * FROM boardgames
+                                      WHERE "stats.usersrated"!=0
+                                      AND "game.type"='boardgame'
                                       ORDER BY "stats.usersrated" DESC
                                       LIMIT 2500;''',con)
             #numbers in incremental order needed to cosine similarity matrix to work
@@ -144,7 +144,7 @@ def similarity(id):
     ''' Script '''
     #import table from sql database
     df = get_table_from_sqlite()
-
+    print(df)
     rec_games_list = []
     #import game user likes from sql database
     rec_games_list.extend(get_board_most_posted(user_id))

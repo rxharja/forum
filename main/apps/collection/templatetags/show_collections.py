@@ -1,4 +1,4 @@
-import sqlite3
+import psycopg2
 from django import template
 
 register = template.Library()
@@ -7,7 +7,7 @@ register = template.Library()
 def top_collections(user_id):
     def get_collections(user_id):
         try:
-            con = sqlite3.connect("db.sqlite3")
+            con = psycopg2.connect("dbname=db_psql port=5432")
             cursorObj = con.cursor()
             cursorObj.execute("SELECT collection_name FROM collection_collection WHERE user_id="+str(user_id))
             return cursorObj.fetchall()
@@ -18,7 +18,7 @@ def top_collections(user_id):
 
     def get_collection_details(name,user_id):
         try:
-            con = sqlite3.connect("db.sqlite3")
+            con = psycopg2.connect("dbname=db_psql port=5432")
             cursorObj = con.cursor()
             cursorObj.execute('SELECT * FROM collection_collection_has_games WHERE collection_name=\''+ name + '\' AND user_id='+str(user_id)+ ' LIMIT 6')
             return cursorObj.fetchall()
@@ -48,3 +48,5 @@ def top_collections(user_id):
 
     print(cols)
     return cols
+
+print(top_collections(8))

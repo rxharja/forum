@@ -1,13 +1,8 @@
 import psycopg2
-from django import template
-
-register = template.Library()
-
-@register.simple_tag
 def one_collection(user_id):
     def get_collections(user_id):
         try:
-            con = psycopg2.connect("dbname=db_psql port=5432")
+            con = psycopg2.connect("db_psql")
             cursorObj = con.cursor()
             cursorObj.execute("SELECT collection_name FROM collection_collection WHERE user_id ="+str(user_id))
             return cursorObj.fetchall()
@@ -18,7 +13,7 @@ def one_collection(user_id):
 
     def get_collection_details(name,user_id):
         try:
-            con = psycopg2.connect("dbname=db_psql port=5432")
+            con = psycopg2.connect("db_psql")
             cursorObj = con.cursor()
             cursorObj.execute('SELECT * FROM user_collections WHERE collection_name = \"'+ name + '\" AND user_id='+str(user_id))
             return cursorObj.fetchone()
@@ -39,3 +34,5 @@ def one_collection(user_id):
         k+=1
 
     return cols
+
+print(one_collection(8))

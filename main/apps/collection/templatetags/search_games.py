@@ -1,4 +1,4 @@
-import sqlite3
+import psycopg2
 from django import template
 
 register = template.Library()
@@ -9,7 +9,7 @@ def search(game_query):
         return "No Search";
     def search_game(game_query):
         try:
-            con = sqlite3.connect("db.sqlite3")
+            con = psycopg2.connect("dbname=db_psql port=5432")
             cursorObj = con.cursor()
             cursorObj.execute("SELECT \"details.name\",\"details.description\",\"stats.average\",\"stats.averageweight\",\"details.image\",\"game.id\" FROM boardgames WHERE LOWER(\"details.name\") like LOWER(\'%" + game_query + "%\') ORDER BY \"stats.usersrated\" DESC LIMIT 2500;")
             return cursorObj.fetchall()
