@@ -63,3 +63,6 @@ node_modules/
 
 # dotenv environment variables file
 .env
+db.sqlite3
+db_psql.dump
+db_psql.dumps
