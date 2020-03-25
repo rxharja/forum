@@ -1,5 +1,4 @@
 import psycopg2
-import urllib.parse as urlparse
 import os
 from django import template
 
@@ -7,12 +6,9 @@ register = template.Library()
 
 @register.simple_tag
 def top_collections(user_id):
-    url = urlparse.urlparse(os.environ['DATABASE_URL'])
-    dbname = url.path[1:]
-    port = url.port
     def get_collections(user_id):
         try:
-            con = psycopg2.connect("dbname=db_psql port=5432")
+            con = psycopg2.connect(os.environ['DATABASE_URL'],sslmode='require')
             cursorObj = con.cursor()
             cursorObj.execute("SELECT collection_name FROM collection_collection WHERE user_id="+str(user_id))
             return cursorObj.fetchall()
