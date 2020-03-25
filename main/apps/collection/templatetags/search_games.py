@@ -15,7 +15,7 @@ def search(game_query):
             cursorObj.execute("SELECT \"details.name\",\"details.description\",\"stats.average\",\"stats.averageweight\",\"details.image\",\"game.id\" FROM boardgames WHERE LOWER(\"details.name\") like LOWER(\'%" + game_query + "%\') ORDER BY \"stats.usersrated\" DESC LIMIT 2500;")
             return cursorObj.fetchall()
         except:
-            print("Sorry no database found!")
+            print("Sorry no database found for search_games!")
         finally:
             con.close()
 

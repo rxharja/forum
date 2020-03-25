@@ -13,18 +13,18 @@ def top_collections(user_id):
             cursorObj.execute("SELECT collection_name FROM collection_collection WHERE user_id="+str(user_id))
             return cursorObj.fetchall()
         except:
-            print("Sorry database not found!")
+            print("Sorry database not found in collection_collection!")
         finally:
             con.close()
 
     def get_collection_details(name,user_id):
         try:
-            con = psycopg2.connect("dbname=db_psql port=5432")
+            con = psycopg2.connect(os.environ['DATABASE_URL'],sslmode='require')
             cursorObj = con.cursor()
             cursorObj.execute('SELECT * FROM collection_collection_has_games WHERE collection_name=\''+ name + '\' AND user_id='+str(user_id)+ ' LIMIT 6')
             return cursorObj.fetchall()
         except:
-            print("Sorry database not found!")
+            print("Sorry database not found in collection_collection_has_games!")
         finally:
             con.close()
 

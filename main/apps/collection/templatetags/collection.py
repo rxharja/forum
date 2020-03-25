@@ -13,7 +13,7 @@ def one_collection(user_id):
             cursorObj.execute("SELECT collection_name FROM collection_collection WHERE user_id ="+str(user_id))
             return cursorObj.fetchall()
         except:
-            print("Sorry database not found!")
+            print("Sorry database not found in collection!")
         finally:
             con.close()
 
@@ -24,7 +24,7 @@ def one_collection(user_id):
             cursorObj.execute('SELECT * FROM user_collections WHERE collection_name = \"'+ name + '\" AND user_id='+str(user_id))
             return cursorObj.fetchone()
         except:
-            print("Sorry database not found!")
+            print("Sorry database not found in user_collections!")
         finally:
             con.close()
 
