@@ -148,11 +148,13 @@ def similarity(id):
     rec_games_list = []
     #import game user likes from sql database
     rec_games_list.extend(get_board_most_posted(user_id))
-    rec_game = random.choice(rec_games_list)
     rand_num = random.randint(0,100)
+    if rec_games_list == [] or rand_num <= 10:
+        rec_game = ("random",get_title_from_index(random.randrange(0,len(df))))
+    else:
+        rec_game = random.choice(rec_games_list)
     #add a wildcard
     # rec_games_list.append( ("random", get_title_from_index( random.randrange(0,len(df)))))
-    if rand_num <= 10: rec_game = ("random",get_title_from_index(random.randrange(0,len(df))))
     why_recommended = rec_game[0]
     game_user_likes = rec_game[1]
     print(rec_game,rec_games_list)
