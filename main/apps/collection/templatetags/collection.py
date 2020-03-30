@@ -18,7 +18,7 @@ def one_collection(user_id):
                      WHERE collection_name = \"' + name + '\" \
                      AND user_id='+str(user_id), 'one')
 
-    query = get_collections(1)
+    query = get_collections(user_id)
     cols = {}
 
     k = 0
