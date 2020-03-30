@@ -24,7 +24,7 @@ def one_collection(user_id):
     k = 0
     for col in query:
         cols[k] = {}
-        col_deets = get_collection_details(col[0], 1)
+        col_deets = get_collection_details(col[0], user_id)
         cols[k]['name'] = col_deets[1]
         cols[k]["image"] = col_deets[4]
         k += 1
