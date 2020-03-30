@@ -8,6 +8,7 @@ import pandas as pd
 def get_from_db(query, amount, to_pd=False):
 
     default = DATABASES['default']['ENGINE']
+    print("working with the", default, "database")
     if default == 'django.db.backends.postgresql_psycopg2':
         try:
             # web server heroku
