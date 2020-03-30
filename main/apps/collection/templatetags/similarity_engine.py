@@ -57,7 +57,9 @@ def similarity(id):
         games_to_rec = []
         try:
             query = "SELECT name FROM user_most_posted_game WHERE id=" + str(user_id)
-            games_to_rec.append(('posted', get_from_db(query, 'one')[0]))
+            most_posted = get_from_db(query, 'one')
+            if most_posted:
+                games_to_rec.append(('posted', most_posted[0]))
         except RuntimeError:
             print("user_most_posted_game table not found!")
 
