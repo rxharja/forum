@@ -1,9 +1,13 @@
 Forum with Games Similarity Recommendation System and Collection Management
+
 Live version on Heroku:
 https://young-wildwood-67631.herokuapp.com/
+
 This app was built with django and the forum django-machina framework.
 Scipy was used to for its count vectorizer and cosine similarity matrix building powers to create the games similarity matrix.
+
 The games were taken from BoardGameGeek's boardgame database which can be found on kaggle here: https://www.kaggle.com/mandshaw/games-0918
+
 The django-machina example was extended with a dashboard feature which allows a user to
 
 manage their games collection,
