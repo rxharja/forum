@@ -26,11 +26,15 @@
   </div>
   <p id="success"></p>
   <div id="">
+    <!-- searchquery is found from the form up above, if there was a search then run this code -->
     {% if searchquery %}
+    <!-- search is a template tag in apps/collection/templatetags, handle the search -->
+    <!-- with python database connection because the games table has no django model -->
     {% search searchquery as query %}
     {% endif %}
     {% for index,game in query.items %}
     <div class="results-box">
+      <!-- template tag that makes our game information js readable -->
       {% jsonify game as js_game %}
       <input class="check-game" type="checkbox" onclick="" name="add_to_collection" value="{{ js_game }}" />
       <label for="add_to_collection">Add to collection</label>
@@ -39,38 +43,41 @@
       </div>
       <div id="{{game.id}}" class="info-box">
         <h4 class="game-title">{{ game.game }}</h4>
-
         <p>Rating: {{ game.rating }}/10</p>
         <p>Complexity: {{ game.complexity }}/5</p>
       </div>
     </div>
     {% endfor %}
   </div>
-  {% if test %}
-  {{test}}
-  {% endif %}
 </div>
 
+<!-- JS -->
 <script>
-
+  //get collection information from models
   let cols = {{collection|safe}}
   let games = {{collection_has_games|safe}}
+  // for each collection, make a new button below the search bar to allow for
+  // adding to it with the value of the game name
   cols.forEach((col) => {
     name = col.fields.collection_name
     let str = "<button class=\".add-button\" value=\""+name+"\">Add to " + name + "</button>"
     $("#display-cols").append(str);
   });
 
-
+  // Clicking one of these newly added buttons should tell the page to
+  // send all the checked off games to the collection database based on
+  // the collection name and store them
   $("#display-cols").on('click', "button", function(event) {
     event.stopPropagation();
     event.stopImmediatePropagation();
     let package = {}
     const userId = {{user.id}};
+    // collection name is the button that was just created
     const collectionName = $(this).val()
     let i = 0
     $('.check-game:checkbox:checked').map(function(){
       game = JSON.parse(this.value);
+      // extend game object with user id and collection name 
       $.extend(game,{'userId':userId});
       $.extend(game,{'collection_name':collectionName});
       num = i.toString();
@@ -89,6 +96,9 @@
     });
   });
 
+  // creates a new collection based on the user's inputted value in the text
+  // field, then we update the view to show its now a collection through a
+  // a button
   $("#add-button").on('click', function(event) {
     let colName = $("#collection-name").val();
     event.stopPropagation();
@@ -101,6 +111,7 @@
     if (!presentCols.includes(colName)){
       newCol.push({{user.id}},colName)
     }
+    // successful ajax POST results in a new button on DOM
     $.ajax({
         type : "POST",
         url: '',

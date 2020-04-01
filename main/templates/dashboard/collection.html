@@ -2,6 +2,9 @@
 {% load i18n %}
 {% load static %}
 
+<!-- This page allows a user to view their collections -->
+<!-- They can view, delete a game from a collection, or delete an entire collection -->
+
 {% block css %}
   {{ block.super }}
   <link rel="stylesheet" type="text/css" href="{% static 'css/coltheme.css' %}" />
@@ -23,16 +26,21 @@
 
 
 <script>
+
+  // load collection obj from dom into our js code
   const cols = {{collection|safe}}
   let games = {{collection_has_games|safe}}
   console.log(games);
 
+  // create a button for each collection associated with user to the col-buts div
   cols.forEach((col) => {
     let name = col.fields.collection_name
     let str = "<button class=\".add-button\" value=\""+name+"\">View " + name + "</button>"
     $("#col-buts").append(str);
   });
 
+  // a button click in the col-buts div will rerender the DOM to display
+  // collection related information based on the button clicked
   $("#col-buts").on('click','button',function(event){
     event.stopPropagation();
     event.stopImmediatePropagation();
@@ -41,6 +49,8 @@
     display(gamesToDisplay,col_name);
   });
 
+  // rerenders content div, for each game in the collection, a div with the game's
+  // information is appended to the games div. The title changes to the collection name
   function display(games,title) {
     let itmsToReplace = "<div id='games'>";
     games.forEach(game => {
@@ -56,13 +66,19 @@
     $("#title").replaceWith("<h1 id='title'>"+title+"</h1>")
     $("#games").replaceWith(itmsToReplace);
   }
+
+  // sends ajax post to delete collection that is currently being rendered
+  // in the games div
   $("#delete").on('click',function(){
+    // double check to make sure user is sure
     if (confirm("Are you sure you want to delete the collection?")) {
+      // collection name is taken from the title
       let colToDelete = $("#title").text();
       $.ajax({
           type : "POST",
           url: '',
           data : {'colToDelete':colToDelete},
+          // page reload on successful operation to update the collection object
           success: function (data) {
             location.reload();
             return false;
@@ -71,6 +87,9 @@
     }
   });
 
+  // this deletes certain games from a colelction based on which games are
+  // checked off by a user. They are sent with an ajax request as a list of
+  // unique id's associated with the game's table entries
   $("#delete-selected").on('click',function() {
     let gamesToDelete = []
     $('.check-game:checkbox:checked').map(function(){

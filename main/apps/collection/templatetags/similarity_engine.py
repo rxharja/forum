@@ -9,6 +9,16 @@ from django import template
 
 register = template.Library()
 
+'''
+Handles the creation of the similarity matrix and the retrieving
+
+of the five most similar games to a user. It will return 5 similar games based
+on a game a user has subscribed to in the board games, has posted the most in,
+or has owned in a collection.
+
+inputs:
+id: int based on user id
+'''
 
 @register.simple_tag
 def similarity(id):
